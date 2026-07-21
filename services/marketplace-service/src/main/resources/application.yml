@@ -1,0 +1,13 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: marketplace-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/daaakiya_db
+    username: daaakiya
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
