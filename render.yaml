@@ -2,7 +2,7 @@ services:
   # ----------------------------------------------------
   # Redis (Private Service running Redis Docker image)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: daaakiya-redis
     env: docker
     dockerfilePath: Dockerfile.redis
@@ -14,7 +14,7 @@ services:
   # ----------------------------------------------------
   # Spring Boot API Gateway (Public Web Service)
   # ----------------------------------------------------
-  - type: webService
+  - type: web
     name: api-gateway
     env: docker
     rootDir: services/api-gateway
@@ -29,7 +29,7 @@ services:
   # ----------------------------------------------------
   # Auth Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: auth-service
     env: docker
     rootDir: services/auth-service
@@ -48,7 +48,7 @@ services:
   # ----------------------------------------------------
   # User Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: user-service
     env: docker
     rootDir: services/user-service
@@ -67,7 +67,7 @@ services:
   # ----------------------------------------------------
   # Content Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: content-service
     env: docker
     rootDir: services/content-service
@@ -86,7 +86,7 @@ services:
   # ----------------------------------------------------
   # Interaction Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: interaction-service
     env: docker
     rootDir: services/interaction-service
@@ -105,7 +105,7 @@ services:
   # ----------------------------------------------------
   # Messaging Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: messaging-service
     env: docker
     rootDir: services/messaging-service
@@ -128,7 +128,7 @@ services:
   # ----------------------------------------------------
   # Match Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: match-service
     env: docker
     rootDir: services/match-service
@@ -147,7 +147,7 @@ services:
   # ----------------------------------------------------
   # Jobs Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: jobs-service
     env: docker
     rootDir: services/jobs-service
@@ -166,7 +166,7 @@ services:
   # ----------------------------------------------------
   # Property Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: property-service
     env: docker
     rootDir: services/property-service
@@ -185,7 +185,7 @@ services:
   # ----------------------------------------------------
   # Marketplace Service (Private Service)
   # ----------------------------------------------------
-  - type: privateService
+  - type: pserv
     name: marketplace-service
     env: docker
     rootDir: services/marketplace-service
@@ -204,7 +204,7 @@ services:
   # ----------------------------------------------------
   # Next.js Frontend (Public Web Service)
   # ----------------------------------------------------
-  - type: webService
+  - type: web
     name: daaakiya-frontend
     env: docker
     rootDir: apps/web
@@ -213,7 +213,7 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_URL
         fromService:
-          type: webService
+          type: web
           name: api-gateway
           property: host
       - key: PORT
