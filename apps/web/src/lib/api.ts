@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// Directly targeting auth-service port 8081 for local development
-const API_BASE_URL = 'http://localhost:8081/api';
+// Get the base API gateway URL (defaulting to localhost:8080/api for local dev if not set)
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+  ? `${process.env.NEXT_PUBLIC_API_URL}/api`
+  : 'http://localhost:8080/api';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,15 +12,17 @@ export const api = axios.create({
   },
 });
 
-// Dynamic URL adapter for local service routing
+// Dynamic URL adapter for local service routing (only active when NEXT_PUBLIC_API_URL is NOT set)
 api.interceptors.request.use(
   (config) => {
-    if (config.url?.startsWith('/auth')) {
-      config.baseURL = 'http://localhost:8081/api';
-    } else if (config.url?.startsWith('/content')) {
-      config.baseURL = 'http://localhost:8083/api';
-    } else if (config.url?.startsWith('/matches')) {
-      config.baseURL = 'http://localhost:8086/api';
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+      if (config.url?.startsWith('/auth')) {
+        config.baseURL = 'http://localhost:8081/api';
+      } else if (config.url?.startsWith('/content')) {
+        config.baseURL = 'http://localhost:8083/api';
+      } else if (config.url?.startsWith('/matches')) {
+        config.baseURL = 'http://localhost:8086/api';
+      }
     }
 
     if (typeof window !== 'undefined') {

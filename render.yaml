@@ -1,0 +1,228 @@
+services:
+  # ----------------------------------------------------
+  # Redis (Private Service running Redis Docker image)
+  # ----------------------------------------------------
+  - type: privateService
+    name: daaakiya-redis
+    env: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile.redis
+    plan: free
+    ports:
+      - port: 6379
+        protocol: TCP
+
+  # ----------------------------------------------------
+  # Spring Boot API Gateway (Public Web Service)
+  # ----------------------------------------------------
+  - type: webService
+    name: api-gateway
+    env: docker
+    dockerContext: services/api-gateway
+    dockerfilePath: services/api-gateway/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: PORT
+        value: 8080
+
+  # ----------------------------------------------------
+  # Auth Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: auth-service
+    env: docker
+    dockerContext: services/auth-service
+    dockerfilePath: services/auth-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8081
+
+  # ----------------------------------------------------
+  # User Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: user-service
+    env: docker
+    dockerContext: services/user-service
+    dockerfilePath: services/user-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8082
+
+  # ----------------------------------------------------
+  # Content Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: content-service
+    env: docker
+    dockerContext: services/content-service
+    dockerfilePath: services/content-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8083
+
+  # ----------------------------------------------------
+  # Interaction Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: interaction-service
+    env: docker
+    dockerContext: services/interaction-service
+    dockerfilePath: services/interaction-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8084
+
+  # ----------------------------------------------------
+  # Messaging Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: messaging-service
+    env: docker
+    dockerContext: services/messaging-service
+    dockerfilePath: services/messaging-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: SPRING_DATA_REDIS_HOST
+        value: daaakiya-redis
+      - key: SPRING_DATA_REDIS_PORT
+        value: 6379
+      - key: PORT
+        value: 8085
+
+  # ----------------------------------------------------
+  # Match Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: match-service
+    env: docker
+    dockerContext: services/match-service
+    dockerfilePath: services/match-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8086
+
+  # ----------------------------------------------------
+  # Jobs Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: jobs-service
+    env: docker
+    dockerContext: services/jobs-service
+    dockerfilePath: services/jobs-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8087
+
+  # ----------------------------------------------------
+  # Property Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: property-service
+    env: docker
+    dockerContext: services/property-service
+    dockerfilePath: services/property-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8088
+
+  # ----------------------------------------------------
+  # Marketplace Service (Private Service)
+  # ----------------------------------------------------
+  - type: privateService
+    name: marketplace-service
+    env: docker
+    dockerContext: services/marketplace-service
+    dockerfilePath: services/marketplace-service/Dockerfile
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: daaakiya
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: password
+      - key: PORT
+        value: 8089
+
+  # ----------------------------------------------------
+  # Next.js Frontend (Public Web Service)
+  # ----------------------------------------------------
+  - type: webService
+    name: daaakiya-frontend
+    env: docker
+    dockerContext: apps/web
+    dockerfilePath: apps/web/Dockerfile
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: webService
+          name: api-gateway
+          property: host
+      - key: PORT
+        value: 3000
+
+databases:
+  # Managed PostgreSQL Database
+  - name: dpg-postgres
+    databaseName: daaakiya_db
+    user: daaakiya
+    plan: free
