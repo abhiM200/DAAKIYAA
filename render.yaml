@@ -21,10 +21,10 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: render
       - key: PORT
-        value: 8080
+        value: "8080"
 
   # ----------------------------------------------------
-  # Auth Service (Private Service)
+  # Auth Service
   # ----------------------------------------------------
   - type: web
     name: auth-service
@@ -35,23 +35,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8081
+        value: "8081"
 
   # ----------------------------------------------------
-  # User Service (Private Service)
+  # User Service
   # ----------------------------------------------------
   - type: web
     name: user-service
@@ -62,23 +70,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8082
+        value: "8082"
 
   # ----------------------------------------------------
-  # Content Service (Private Service)
+  # Content Service
   # ----------------------------------------------------
   - type: web
     name: content-service
@@ -89,23 +105,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8083
+        value: "8083"
 
   # ----------------------------------------------------
-  # Interaction Service (Private Service)
+  # Interaction Service
   # ----------------------------------------------------
   - type: web
     name: interaction-service
@@ -116,23 +140,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8084
+        value: "8084"
 
   # ----------------------------------------------------
-  # Messaging Service (Private Service)
+  # Messaging Service
   # ----------------------------------------------------
   - type: web
     name: messaging-service
@@ -143,15 +175,23 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
@@ -160,10 +200,10 @@ services:
       - key: SPRING_DATA_REDIS_PORT
         value: "6379"
       - key: PORT
-        value: 8085
+        value: "8085"
 
   # ----------------------------------------------------
-  # Match Service (Private Service)
+  # Match Service
   # ----------------------------------------------------
   - type: web
     name: match-service
@@ -174,23 +214,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8086
+        value: "8086"
 
   # ----------------------------------------------------
-  # Jobs Service (Private Service)
+  # Jobs Service
   # ----------------------------------------------------
   - type: web
     name: jobs-service
@@ -201,23 +249,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8087
+        value: "8087"
 
   # ----------------------------------------------------
-  # Property Service (Private Service)
+  # Property Service
   # ----------------------------------------------------
   - type: web
     name: property-service
@@ -228,23 +284,31 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8088
+        value: "8088"
 
   # ----------------------------------------------------
-  # Marketplace Service (Private Service)
+  # Marketplace Service
   # ----------------------------------------------------
   - type: web
     name: marketplace-service
@@ -255,20 +319,28 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: dpg-postgres
-          property: connectionURI
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dpg-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dpg-postgres
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: dpg-postgres
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: dpg-postgres
           property: password
       - key: PORT
-        value: 8089
+        value: "8089"
 
   # ----------------------------------------------------
   # Next.js Frontend (Public Web Service)
@@ -286,7 +358,7 @@ services:
           name: api-gateway
           property: host
       - key: PORT
-        value: 3000
+        value: "3000"
 
 databases:
   # Managed PostgreSQL Database
