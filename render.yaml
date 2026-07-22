@@ -36,12 +36,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8081
 
@@ -55,12 +63,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8082
 
@@ -74,12 +90,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8083
 
@@ -93,12 +117,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8084
 
@@ -112,16 +144,24 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: SPRING_DATA_REDIS_HOST
         value: daaakiya-redis
       - key: SPRING_DATA_REDIS_PORT
-        value: 6379
+        value: "6379"
       - key: PORT
         value: 8085
 
@@ -135,12 +175,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8086
 
@@ -154,12 +202,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8087
 
@@ -173,12 +229,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8088
 
@@ -192,12 +256,20 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-postgres:5432/daaakiya_db
+        fromDatabase:
+          name: dpg-postgres
+          property: connectionURI
       - key: SPRING_DATASOURCE_USERNAME
-        value: daaakiya
+        fromDatabase:
+          name: dpg-postgres
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        value: password
+        fromDatabase:
+          name: dpg-postgres
+          property: password
       - key: PORT
         value: 8089
 
