@@ -2,7 +2,7 @@ services:
   # ----------------------------------------------------
   # Redis (Private Service running Redis Docker image)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: daaakiya-redis
     env: docker
     dockerfilePath: Dockerfile.redis
@@ -26,7 +26,7 @@ services:
   # ----------------------------------------------------
   # Auth Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: auth-service
     env: docker
     rootDir: services/auth-service
@@ -45,7 +45,7 @@ services:
   # ----------------------------------------------------
   # User Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: user-service
     env: docker
     rootDir: services/user-service
@@ -64,7 +64,7 @@ services:
   # ----------------------------------------------------
   # Content Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: content-service
     env: docker
     rootDir: services/content-service
@@ -83,7 +83,7 @@ services:
   # ----------------------------------------------------
   # Interaction Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: interaction-service
     env: docker
     rootDir: services/interaction-service
@@ -102,7 +102,7 @@ services:
   # ----------------------------------------------------
   # Messaging Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: messaging-service
     env: docker
     rootDir: services/messaging-service
@@ -125,7 +125,7 @@ services:
   # ----------------------------------------------------
   # Match Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: match-service
     env: docker
     rootDir: services/match-service
@@ -144,7 +144,7 @@ services:
   # ----------------------------------------------------
   # Jobs Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: jobs-service
     env: docker
     rootDir: services/jobs-service
@@ -163,7 +163,7 @@ services:
   # ----------------------------------------------------
   # Property Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: property-service
     env: docker
     rootDir: services/property-service
@@ -182,7 +182,7 @@ services:
   # ----------------------------------------------------
   # Marketplace Service (Private Service)
   # ----------------------------------------------------
-  - type: pserv
+  - type: web
     name: marketplace-service
     env: docker
     rootDir: services/marketplace-service
