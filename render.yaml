@@ -7,10 +7,7 @@ services:
     env: docker
     dockerfilePath: Dockerfile.redis
     plan: free
-    ports:
-      - port: 6379
-        protocol: TCP
-
+  
   # ----------------------------------------------------
   # Spring Boot API Gateway (Public Web Service)
   # ----------------------------------------------------
