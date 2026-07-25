@@ -1,54 +1,40 @@
+databases:
+  - name: daakiyaa-db
+    databaseName: daakiyaa
+    user: daakiyaa_user
+
 services:
-  # ----------------------------------------------------
-  # Redis (Private Service running Redis Docker image)
-  # ----------------------------------------------------
   - type: web
-    name: daaakiya-redis
+    name: daakiyaa
     env: docker
-    dockerfilePath: Dockerfile.redis
     plan: free
-  
-  # ----------------------------------------------------
-  # Spring Boot Monolith (Public Web Service)
-  # ----------------------------------------------------
-  - type: web
-    name: monolith-service
-    env: docker
-    dockerfilePath: Dockerfile
-    plan: free
+    healthCheckPath: /actuator/health
     envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: daakiyaa-db
+          property: connectionString
+      - key: DATABASE_USERNAME
+        fromDatabase:
+          name: daakiyaa-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: daakiyaa-db
+          property: password
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: daakiyaa-db
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: daakiyaa-db
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: daakiyaa-db
+          property: database
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: DB_HOST
-        fromDatabase:
-          name: dpg-postgres
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: dpg-postgres
-          property: port
-      - key: DB_NAME
-        fromDatabase:
-          name: dpg-postgres
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: dpg-postgres
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: dpg-postgres
-          property: password
-      - key: SPRING_DATA_REDIS_HOST
-        value: daaakiya-redis
-      - key: SPRING_DATA_REDIS_PORT
-        value: "6379"
-      - key: PORT
-        value: "8080"
-
-databases:
-  # Managed PostgreSQL Database
-  - name: dpg-postgres
-    databaseName: daaakiya_db
-    user: daaakiya
-    plan: free
+      - key: RENDER_EXTERNAL_URL
+        value: https://daakiyaa.onrender.com

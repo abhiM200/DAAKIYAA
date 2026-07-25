@@ -1,24 +1,28 @@
-# Stage 1: Build the React frontend
-FROM node:20-alpine AS frontend-build
-WORKDIR /app/frontend
-COPY apps/web/package*.json ./
-RUN npm ci
-COPY apps/web/ ./
-RUN npm run build
+# --- Build Stage ---
+FROM eclipse-temurin:21-jdk-alpine AS build
+# Install Maven
+RUN apk add --no-cache maven
+WORKDIR /app
+COPY . .
+# Build the JAR using installed Maven
+RUN cd services/monolith-service && mvn clean package -DskipTests
 
-# Stage 2: Build the Spring Boot backend
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS backend-build
-WORKDIR /app/backend
-COPY services/monolith-service/pom.xml .
-RUN mvn dependency:go-offline -B || true
-COPY services/monolith-service/src ./src
-# Copy the built frontend into Spring Boot's static resources directory
-COPY --from=frontend-build /app/frontend/out ./src/main/resources/static
-RUN mvn clean package -DskipTests -B
-
-# Stage 3: Run the monolith
+# --- Run Stage ---
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=backend-build /app/backend/target/*.jar app.jar
+COPY --from=build /app/services/monolith-service/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-XX:+UseSerialGC", "-Xmx400m", "-jar", "app.jar"]
+
+# Docker health check — retries for up to 3 minutes (Render uses its own check too)
+HEALTHCHECK --interval=30s --timeout=15s --start-period=90s --retries=6 \
+  CMD wget --quiet --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+
+ENTRYPOINT ["java", \
+  "-Xms32m", "-Xmx200m", \
+  "-XX:+UseSerialGC", \
+  "-XX:MaxMetaspaceSize=96m", \
+  "-XX:TieredStopAtLevel=1", \
+  "-XX:+UseStringDeduplication", \
+  "-Djava.security.egd=file:/dev/./urandom", \
+  "-Dspring.jmx.enabled=false", \
+  "-jar", "app.jar"]
