@@ -14,7 +14,6 @@ services:
   - type: web
     name: monolith-service
     env: docker
-    rootDir: services/monolith-service
     dockerfilePath: Dockerfile
     plan: free
     envVars:
@@ -46,24 +45,6 @@ services:
         value: "6379"
       - key: PORT
         value: "8080"
-
-  # ----------------------------------------------------
-  # Next.js Frontend (Public Web Service)
-  # ----------------------------------------------------
-  - type: web
-    name: daaakiya-frontend
-    env: docker
-    rootDir: apps/web
-    dockerfilePath: Dockerfile
-    plan: free
-    envVars:
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: monolith-service
-          property: host
-      - key: PORT
-        value: "3000"
 
 databases:
   # Managed PostgreSQL Database
