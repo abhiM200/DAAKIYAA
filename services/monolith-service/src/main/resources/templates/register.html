@@ -9,7 +9,7 @@
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
         
-        <form action="/register" method="post" class="space-y-4">
+        <form id="registerForm" class="space-y-4">
             <div>
                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                 <input type="text" id="username" name="username" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border" required>
@@ -32,5 +32,34 @@
             Already have an account? <a href="/login" class="text-blue-600 hover:underline">Log in</a>
         </p>
     </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // AuthController currently expects email and password
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/feed'; // redirect to feed on success
+                } else {
+                    const errText = await response.text();
+                    alert(errText || 'Registration failed');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Registration failed due to network error');
+            }
+        });
+    </script>
 </body>
 </html>
