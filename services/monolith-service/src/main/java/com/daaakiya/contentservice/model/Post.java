@@ -22,7 +22,7 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostType postType = PostType.STANDARD; // STANDARD, REEL, STORY
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Media> mediaList = new ArrayList<>();
 
     @Column(updatable = false)
@@ -55,6 +55,3 @@ public class Post {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
 
-enum PostType {
-    STANDARD, REEL, STORY
-}

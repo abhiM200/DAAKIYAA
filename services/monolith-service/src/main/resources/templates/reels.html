@@ -48,84 +48,93 @@
     </nav>
 
     <!-- Reels Content -->
-    <main class="flex-1 reel-container no-scrollbar ml-20 md:ml-0">
-        
-        <!-- Reel 1 -->
-        <div class="reel">
-            <!-- Video Placeholder -->
-            <div class="absolute inset-0 bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
-                <i class="fa-solid fa-play text-6xl text-white/50"></i>
-            </div>
-            <!-- Overlay UI -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-end">
-                <div class="mb-4">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <img src="https://ui-avatars.com/api/?name=DJ+Snake&background=random" class="w-10 h-10 rounded-full border border-white">
-                        <span class="font-bold">dj_snake</span>
-                        <button class="border border-white text-xs px-2 py-1 rounded ml-2 font-semibold">Follow</button>
-                    </div>
-                    <p class="text-sm w-3/4 mb-2">New sound dropping! Share this if you vibe with it 🎶🔥 #music #beats</p>
-                    <div class="flex items-center space-x-2 text-xs bg-white/20 w-fit px-2 py-1 rounded-full backdrop-blur-md">
-                        <i class="fa-solid fa-music"></i>
-                        <marquee class="w-32" scrollamount="3">dj_snake • Original Audio • Global Sounds</marquee>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col items-center space-y-4 mb-4 mr-2">
-                    <div class="flex flex-col items-center">
-                        <i class="fa-regular fa-heart text-3xl hover:text-red-500 cursor-pointer transition"></i>
-                        <span class="text-xs mt-1">45.2K</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i class="fa-regular fa-comment text-3xl cursor-pointer"></i>
-                        <span class="text-xs mt-1">1,203</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i class="fa-regular fa-paper-plane text-3xl cursor-pointer"></i>
-                        <span class="text-xs mt-1">Share</span>
-                    </div>
-                    <div class="flex flex-col items-center mt-2">
-                        <img src="https://ui-avatars.com/api/?name=Audio&background=000&color=fff" class="w-8 h-8 rounded-md border-2 border-white animate-spin" style="animation-duration: 3s;">
-                    </div>
-                </div>
-            </div>
+    <main id="reelsContainer" class="flex-1 reel-container no-scrollbar ml-20 md:ml-0">
+        <div class="reel flex flex-col items-center justify-center text-gray-500">
+            <i class="fa-solid fa-spinner fa-spin text-4xl mb-4"></i>
+            <p>Loading reels...</p>
         </div>
-
-        <!-- Reel 2 -->
-        <div class="reel">
-            <div class="absolute inset-0 bg-gradient-to-b from-blue-900 to-black flex items-center justify-center">
-                <i class="fa-solid fa-play text-6xl text-white/50"></i>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-end">
-                <div class="mb-4">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <img src="https://ui-avatars.com/api/?name=Travel&background=random" class="w-10 h-10 rounded-full border border-white">
-                        <span class="font-bold">travel_daily</span>
-                        <button class="border border-white text-xs px-2 py-1 rounded ml-2 font-semibold">Follow</button>
-                    </div>
-                    <p class="text-sm w-3/4 mb-2">Wait for the sunset... 🌅</p>
-                    <div class="flex items-center space-x-2 text-xs bg-white/20 w-fit px-2 py-1 rounded-full backdrop-blur-md">
-                        <i class="fa-solid fa-music"></i>
-                        <span>Trending • Chill Vibes</span>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center space-y-4 mb-4 mr-2">
-                    <div class="flex flex-col items-center">
-                        <i class="fa-solid fa-heart text-red-500 text-3xl cursor-pointer"></i>
-                        <span class="text-xs mt-1">899K</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i class="fa-regular fa-comment text-3xl cursor-pointer"></i>
-                        <span class="text-xs mt-1">4,302</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i class="fa-regular fa-paper-plane text-3xl cursor-pointer"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
+    <script>
+        const token = localStorage.getItem('token') || '';
+        
+        async function loadReels() {
+            try {
+                const response = await fetch('/api/content/posts/reels', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Failed to load reels');
+                const page = await response.json();
+                const posts = page.content;
+                
+                const container = document.getElementById('reelsContainer');
+                if (posts.length === 0) {
+                    container.innerHTML = '<div class="reel flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-video-slash text-6xl mb-4"></i><p>No reels found.</p></div>';
+                    return;
+                }
+
+                container.innerHTML = posts.map((post, i) => {
+                    const videoUrl = (post.mediaList && post.mediaList.length > 0) ? post.mediaList[0].mediaUrl : null;
+                    const colors = ['from-blue-900', 'from-purple-900', 'from-pink-900', 'from-gray-900'];
+                    const randomColor = colors[i % colors.length];
+                    const username = "user_" + post.authorId.substring(0, 5);
+                    
+                    return `
+                    <div class="reel">
+                        ${videoUrl ? `
+                        <div class="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
+                            <video src="${videoUrl}" class="w-full h-full object-cover" loop playsinline onclick="this.paused ? this.play() : this.pause()"></video>
+                        </div>
+                        ` : `
+                        <div class="absolute inset-0 bg-gradient-to-b ${randomColor} to-black flex flex-col items-center justify-center text-center p-8">
+                            <i class="fa-solid fa-play text-6xl text-white/50 mb-6"></i>
+                            <h2 class="text-3xl font-bold italic mb-4">Reel Preview</h2>
+                        </div>
+                        `}
+                        <!-- Overlay UI -->
+                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-end">
+                            <div class="mb-4">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <img src="https://ui-avatars.com/api/?name=${username}&background=random" class="w-10 h-10 rounded-full border border-white">
+                                    <span class="font-bold">${username}</span>
+                                    <button class="border border-white text-xs px-2 py-1 rounded ml-2 font-semibold hover:bg-white hover:text-black transition">Follow</button>
+                                </div>
+                                <p class="text-sm w-3/4 mb-2 shadow-sm">${post.textContent || 'No caption provided'}</p>
+                                <div class="flex items-center space-x-2 text-xs bg-black/40 w-fit px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+                                    <i class="fa-solid fa-music"></i>
+                                    <marquee class="w-32" scrollamount="3">${username} • Original Audio • Global Sounds</marquee>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col items-center space-y-4 mb-4 mr-2">
+                                <div class="flex flex-col items-center">
+                                    <i class="fa-solid fa-heart text-white text-3xl hover:text-red-500 cursor-pointer transition"></i>
+                                    <span class="text-xs mt-1 drop-shadow-md font-bold">Like</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <i class="fa-solid fa-comment text-white text-3xl hover:text-gray-300 cursor-pointer transition"></i>
+                                    <span class="text-xs mt-1 drop-shadow-md font-bold">Comment</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <i class="fa-solid fa-paper-plane text-white text-3xl hover:text-gray-300 cursor-pointer transition"></i>
+                                    <span class="text-xs mt-1 drop-shadow-md font-bold">Share</span>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <img src="https://ui-avatars.com/api/?name=Audio&background=000&color=fff" class="w-10 h-10 rounded-full border-2 border-white animate-spin shadow-lg" style="animation-duration: 4s;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('reelsContainer').innerHTML = '<div class="reel flex flex-col items-center justify-center text-red-500"><p>Error loading reels.</p></div>';
+            }
+        }
+
+        // Initial Load
+        loadReels();
+    </script>
 </body>
-</html>

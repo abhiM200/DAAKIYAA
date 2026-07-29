@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface PostRepository extends JpaRepository<Post, UUID> {
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Page<Post> findByAuthorIdOrderByCreatedAtDesc(UUID authorId, Pageable pageable);
+    Page<Post> findByPostTypeOrderByCreatedAtDesc(com.daaakiya.contentservice.model.PostType postType, Pageable pageable);
 }

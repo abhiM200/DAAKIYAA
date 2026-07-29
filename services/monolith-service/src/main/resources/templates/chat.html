@@ -10,6 +10,8 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body class="flex h-screen overflow-hidden">
 
@@ -103,61 +105,97 @@
             </div>
             
             <!-- Messages Area -->
-            <div class="flex-1 p-4 overflow-y-auto space-y-4">
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4">
                 
                 <div class="flex flex-col items-center mb-6">
-                    <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-24 h-24 rounded-full mb-2">
-                    <h3 class="font-bold text-lg">alice_99</h3>
-                    <p class="text-gray-400 text-sm">Daakiyaa • 4K followers</p>
-                    <button class="bg-[#262626] text-sm font-bold mt-3 px-4 py-1.5 rounded-lg hover:bg-gray-700">View Profile</button>
+                    <img src="https://ui-avatars.com/api/?name=Public+Chat&background=random" class="w-24 h-24 rounded-full mb-2">
+                    <h3 class="font-bold text-lg">Public Chatroom</h3>
+                    <p class="text-gray-400 text-sm">Global Chat</p>
                 </div>
 
                 <div class="flex justify-center">
-                    <span class="text-xs text-gray-500">Jul 29, 2026, 12:40 PM</span>
+                    <span class="text-xs text-gray-500">Welcome to the global real-time chat!</span>
                 </div>
 
-                <!-- Incoming -->
-                <div class="flex items-end">
-                    <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-8 h-8 rounded-full mr-2">
-                    <div class="bg-[#262626] text-sm py-2 px-4 rounded-3xl rounded-bl-none max-w-md border border-gray-700">
-                        Hey! Did you see the new update? It's literally Instagram now.
-                    </div>
-                </div>
+                <!-- Messages will be appended here -->
 
-                <!-- Outgoing -->
-                <div class="flex justify-end items-end">
-                    <div class="bg-blue-600 text-sm py-2 px-4 rounded-3xl rounded-br-none max-w-md">
-                        I know right?! The dark mode looks so good. ✨
-                    </div>
-                </div>
-                
-                <!-- Incoming -->
-                <div class="flex items-end">
-                    <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-8 h-8 rounded-full mr-2">
-                    <div class="bg-[#262626] text-sm py-2 px-4 rounded-3xl rounded-bl-none max-w-md border border-gray-700 flex flex-col">
-                        <span class="font-bold mb-1">daakiyaa_official</span>
-                        <div class="w-48 h-64 bg-gray-900 rounded flex justify-center items-center mb-2">
-                            <i class="fa-solid fa-image text-3xl text-gray-700"></i>
-                        </div>
-                        <span class="text-xs">Sent a post</span>
-                    </div>
-                </div>
             </div>
 
             <!-- Input Area -->
             <div class="p-4">
                 <div class="bg-transparent border border-gray-700 rounded-full flex items-center px-4 py-2">
                     <i class="fa-regular fa-face-smile text-xl cursor-pointer hover:text-gray-300"></i>
-                    <input type="text" placeholder="Message..." class="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 mx-4 text-sm">
-                    <i class="fa-solid fa-microphone text-xl cursor-pointer hover:text-gray-300 mr-4"></i>
-                    <i class="fa-regular fa-image text-xl cursor-pointer hover:text-gray-300 mr-4"></i>
-                    <i class="fa-regular fa-heart text-xl cursor-pointer hover:text-gray-300"></i>
+                    <input type="text" id="chatInput" placeholder="Message..." class="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 mx-4 text-sm">
+                    <button id="sendBtn" class="font-bold text-blue-500 hover:text-white transition">Send</button>
                 </div>
             </div>
-
         </div>
-
     </main>
 
+    <script>
+        let stompClient = null;
+        let currentUser = localStorage.getItem('username') || "user_" + Math.floor(Math.random() * 1000);
+
+        function connect() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.debug = null; // disable debug logs
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/public', function (message) {
+                    showMessage(JSON.parse(message.body));
+                });
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            if (input.value && stompClient) {
+                const chatMessage = {
+                    sender: currentUser,
+                    content: input.value
+                };
+                stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+                input.value = '';
+            }
+        }
+
+        function showMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const isMe = message.sender === currentUser;
+            
+            let messageHtml = '';
+            if (isMe) {
+                messageHtml = `
+                <div class="flex justify-end items-end">
+                    <div class="bg-blue-600 text-sm py-2 px-4 rounded-3xl rounded-br-none max-w-md">
+                        ${message.content}
+                    </div>
+                </div>`;
+            } else {
+                messageHtml = `
+                <div class="flex items-end">
+                    <img src="https://ui-avatars.com/api/?name=${message.sender}&background=random" class="w-8 h-8 rounded-full mr-2" title="${message.sender}">
+                    <div class="bg-[#262626] text-sm py-2 px-4 rounded-3xl rounded-bl-none max-w-md border border-gray-700">
+                        <p class="font-bold text-xs text-gray-400 mb-1">${message.sender}</p>
+                        ${message.content}
+                    </div>
+                </div>`;
+            }
+
+            chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('chatInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Connect on load
+        connect();
+    </script>
 </body>
 </html>

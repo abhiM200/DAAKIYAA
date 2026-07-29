@@ -52,6 +52,13 @@ public class ContentController {
         Page<Post> posts = postRepository.findByAuthorIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size));
         return ResponseEntity.ok(posts);
     }
+
+    @GetMapping("/reels")
+    public ResponseEntity<Page<Post>> getReels(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "20") int size) {
+        Page<Post> posts = postRepository.findByPostTypeOrderByCreatedAtDesc(com.daaakiya.contentservice.model.PostType.REEL, PageRequest.of(page, size));
+        return ResponseEntity.ok(posts);
+    }
 }
 
 record PostRequest(String textContent, String imageUrl) {}
