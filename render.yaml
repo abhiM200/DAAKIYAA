@@ -37,4 +37,18 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: render
       - key: RENDER_EXTERNAL_URL
-        value: https://daakiyaa.onrender.com
+        value: https://daakiyaa-1.onrender.com
+      - key: SPRING_DATA_REDIS_HOST
+        fromService:
+          type: redis
+          name: daakiyaa-redis
+          property: host
+      - key: SPRING_DATA_REDIS_PORT
+        fromService:
+          type: redis
+          name: daakiyaa-redis
+          property: port
+
+  - type: redis
+    name: daakiyaa-redis
+    plan: free

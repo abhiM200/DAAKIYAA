@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:daaakiya_db}
-    username: ${DB_USER:daaakiya}
-    password: ${DB_PASSWORD:password}
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:daaakiya_db}
+    username: ${DATABASE_USERNAME:daaakiya}
+    password: ${DATABASE_PASSWORD:password}
     driverClassName: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
