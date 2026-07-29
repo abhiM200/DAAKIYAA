@@ -37,6 +37,3 @@ public class Media {
     public void setSortOrder(Integer sortOrder) { this.sortOrder = sortOrder; }
 }
 
-public enum MediaType {
-    IMAGE, VIDEO
-}
