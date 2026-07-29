@@ -21,37 +21,82 @@
             &times;
         </a>
 
-        <div class="story-card shadow-2xl">
-            <!-- Background Image -->
-            <img src="https://source.unsplash.com/random/400x800/?night" class="absolute inset-0 w-full h-full object-cover">
+        <div id="storyCard" class="story-card shadow-2xl flex items-center justify-center text-gray-500">
+            <i class="fa-solid fa-spinner fa-spin text-4xl"></i>
+            <p class="ml-4">Loading stories...</p>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token') || '';
+        let stories = [];
+        let currentIndex = 0;
+        let progressInterval;
+
+        async function loadStories() {
+            try {
+                const response = await fetch('/api/content/posts/stories', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Failed to load stories');
+                const page = await response.json();
+                stories = page.content;
+                
+                if (stories.length === 0) {
+                    document.getElementById('storyCard').innerHTML = '<div class="text-center text-gray-400"><i class="fa-solid fa-eye-slash text-4xl mb-4"></i><p>No stories found.</p></div>';
+                    setTimeout(() => window.location.href = '/feed', 3000);
+                    return;
+                }
+                
+                renderStory(currentIndex);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('storyCard').innerHTML = '<div class="text-red-500">Error loading stories.</div>';
+            }
+        }
+
+        function renderStory(index) {
+            if (index >= stories.length) {
+                window.location.href = '/feed'; // End of stories
+                return;
+            }
+            clearInterval(progressInterval);
             
-            <!-- Overlay Gradients -->
+            const story = stories[index];
+            const imageUrl = (story.mediaList && story.mediaList.length > 0) ? story.mediaList[0].mediaUrl : null;
+            const username = "user_" + story.authorId.substring(0, 5);
+
+            let progressHTML = stories.map((_, i) => {
+                if (i < index) return `<div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>`;
+                if (i === index) return `<div class="progress-bar"><div class="progress-fill" id="activeProgress"></div></div>`;
+                return `<div class="progress-bar"></div>`;
+            }).join('');
+
+            const storyHtml = `
+            ${imageUrl ? `<img src="${imageUrl}" class="absolute inset-0 w-full h-full object-cover">` : `<div class="absolute inset-0 bg-gradient-to-b from-purple-900 to-black flex items-center justify-center p-8 text-center text-2xl font-bold">${story.textContent || 'No text'}</div>`}
+            
             <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
 
             <!-- Top UI -->
             <div class="absolute top-0 left-0 right-0 p-4 z-10">
-                <!-- Progress Bars -->
                 <div class="flex space-x-1 mb-3">
-                    <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
-                    <div class="progress-bar"><div class="progress-fill" id="activeProgress"></div></div>
-                    <div class="progress-bar"></div>
+                    ${progressHTML}
                 </div>
 
-                <!-- User Info -->
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-2">
-                        <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-8 h-8 rounded-full border border-white">
-                        <span class="font-bold text-sm">alice_99</span>
-                        <span class="text-xs text-gray-300">5h</span>
+                        <img src="https://ui-avatars.com/api/?name=${username}&background=random" class="w-8 h-8 rounded-full border border-white">
+                        <span class="font-bold text-sm">${username}</span>
+                        <span class="text-xs text-gray-300">Just now</span>
                     </div>
                     <i class="fa-solid fa-ellipsis text-white cursor-pointer"></i>
                 </div>
             </div>
 
-            <!-- Click Areas for navigation -->
+            <!-- Click Areas -->
             <div class="absolute inset-0 flex z-0">
-                <div class="w-1/2 cursor-pointer" onclick="window.location.href='/feed'"></div>
-                <div class="w-1/2 cursor-pointer" onclick="window.location.href='/feed'"></div>
+                <div class="w-1/2 cursor-pointer" onclick="prevStory()"></div>
+                <div class="w-1/2 cursor-pointer" onclick="nextStory()"></div>
             </div>
 
             <!-- Bottom UI -->
@@ -62,22 +107,36 @@
                 <i class="fa-regular fa-heart text-2xl hover:text-red-500 cursor-pointer"></i>
                 <i class="fa-regular fa-paper-plane text-2xl hover:text-gray-300 cursor-pointer"></i>
             </div>
-        </div>
-    </div>
+            `;
 
-    <script>
-        // Simple progress bar animation
-        let width = 0;
-        const progress = document.getElementById('activeProgress');
-        const interval = setInterval(() => {
-            if (width >= 100) {
-                clearInterval(interval);
-                window.location.href = '/feed';
-            } else {
-                width += 1; // 100 * 50ms = 5000ms (5 seconds per story)
-                progress.style.width = width + '%';
+            document.getElementById('storyCard').innerHTML = storyHtml;
+
+            // Start animation
+            let width = 0;
+            const progress = document.getElementById('activeProgress');
+            progressInterval = setInterval(() => {
+                if (width >= 100) {
+                    nextStory();
+                } else {
+                    width += 1;
+                    progress.style.width = width + '%';
+                }
+            }, 50); // 50 * 100 = 5000ms = 5 seconds
+        }
+
+        function nextStory() {
+            currentIndex++;
+            renderStory(currentIndex);
+        }
+
+        function prevStory() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderStory(currentIndex);
             }
-        }, 50);
+        }
+
+        loadStories();
     </script>
 </body>
 </html>

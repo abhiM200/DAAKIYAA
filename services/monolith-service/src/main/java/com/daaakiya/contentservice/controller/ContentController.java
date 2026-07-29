@@ -59,6 +59,20 @@ public class ContentController {
         Page<Post> posts = postRepository.findByPostTypeOrderByCreatedAtDesc(com.daaakiya.contentservice.model.PostType.REEL, PageRequest.of(page, size));
         return ResponseEntity.ok(posts);
     }
+
+    @GetMapping("/stories")
+    public ResponseEntity<Page<Post>> getStories(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "20") int size) {
+        Page<Post> posts = postRepository.findByPostTypeOrderByCreatedAtDesc(com.daaakiya.contentservice.model.PostType.STORY, PageRequest.of(page, size));
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/explore")
+    public ResponseEntity<Page<Post>> getExplore(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "30") int size) {
+        Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
+        return ResponseEntity.ok(posts);
+    }
 }
 
 record PostRequest(String textContent, String imageUrl) {}

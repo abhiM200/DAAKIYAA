@@ -63,96 +63,71 @@
             </div>
 
             <!-- Explore Grid -->
-            <div class="grid grid-cols-3 gap-1 md:gap-4 pb-20">
-                
-                <!-- Grid Item 1 (Reel double span) -->
-                <div class="grid-item row-span-2 col-span-1">
-                    <img src="https://source.unsplash.com/random/400x800/?nature" class="h-full w-full object-cover transition duration-300">
-                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 14K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 201</span>
-                    </div>
-                </div>
-
-                <!-- Grid Item 2 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?city" class="grid-img">
-                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clone text-white shadow-sm"></i></div>
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 2.1K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 40</span>
-                    </div>
-                </div>
-
-                <!-- Grid Item 3 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?portrait" class="grid-img">
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 800</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 12</span>
-                    </div>
-                </div>
-
-                <!-- Grid Item 4 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?food" class="grid-img">
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 4.5K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 89</span>
-                    </div>
-                </div>
-
-                <!-- Grid Item 5 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?technology" class="grid-img">
-                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 12K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 55</span>
-                    </div>
-                </div>
-
-                <!-- Grid Item 6 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?architecture" class="grid-img">
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 901</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 8</span>
-                    </div>
-                </div>
-                
-                <!-- Grid Item 7 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?abstract" class="grid-img">
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 3.2K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 110</span>
-                    </div>
-                </div>
-                
-                <!-- Grid Item 8 (Reel double span) -->
-                <div class="grid-item row-span-2 col-span-1">
-                    <img src="https://source.unsplash.com/random/400x800/?fashion" class="h-full w-full object-cover transition duration-300">
-                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 45K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 890</span>
-                    </div>
-                </div>
-
-                <!-- Grid Item 9 -->
-                <div class="grid-item">
-                    <img src="https://source.unsplash.com/random/400x400/?travel" class="grid-img">
-                    <div class="grid-overlay space-x-4 text-sm">
-                        <span><i class="fa-solid fa-heart mr-1"></i> 1.1K</span>
-                        <span><i class="fa-solid fa-comment mr-1"></i> 20</span>
-                    </div>
+            <div id="exploreGrid" class="grid grid-cols-3 gap-1 md:gap-4 pb-20">
+                <div class="col-span-3 text-center text-gray-500 py-10">
+                    <i class="fa-solid fa-spinner fa-spin text-3xl mb-4"></i>
+                    <p>Loading explore...</p>
                 </div>
             </div>
             
         </div>
     </main>
 
+    <script>
+        const token = localStorage.getItem('token') || '';
+        
+        async function loadExplore() {
+            try {
+                const response = await fetch('/api/content/posts/explore', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Failed to load explore feed');
+                const page = await response.json();
+                const posts = page.content;
+                
+                const container = document.getElementById('exploreGrid');
+                if (posts.length === 0) {
+                    container.innerHTML = '<div class="col-span-3 text-center text-gray-500 py-10"><p>No posts found in explore.</p></div>';
+                    return;
+                }
+
+                container.innerHTML = posts.map((post, i) => {
+                    const imageUrl = (post.mediaList && post.mediaList.length > 0) ? post.mediaList[0].mediaUrl : null;
+                    const isReel = post.postType === 'REEL';
+                    // Every 5th item we make a double span reel if it's a reel, else just normal
+                    const spanClass = (isReel && i % 5 === 0) ? 'row-span-2 col-span-1' : '';
+                    
+                    if (imageUrl) {
+                        return `
+                        <div class="grid-item ${spanClass}">
+                            <img src="${imageUrl}" class="h-full w-full object-cover transition duration-300 grid-img">
+                            ${isReel ? '<div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>' : ''}
+                            <div class="grid-overlay space-x-4 text-sm">
+                                <span><i class="fa-solid fa-heart mr-1"></i> ${Math.floor(Math.random() * 1000)}</span>
+                                <span><i class="fa-solid fa-comment mr-1"></i> ${Math.floor(Math.random() * 100)}</span>
+                            </div>
+                        </div>`;
+                    } else {
+                        const colors = ['bg-blue-900', 'bg-purple-900', 'bg-pink-900', 'bg-green-900', 'bg-yellow-900', 'bg-gray-800'];
+                        const bgColor = colors[i % colors.length];
+                        return `
+                        <div class="grid-item ${spanClass} ${bgColor} flex items-center justify-center p-4 text-center">
+                            <span class="text-xs truncate w-full">${post.textContent}</span>
+                            <div class="grid-overlay space-x-4 text-sm">
+                                <span><i class="fa-solid fa-heart mr-1"></i> ${Math.floor(Math.random() * 1000)}</span>
+                            </div>
+                        </div>`;
+                    }
+                }).join('');
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('exploreGrid').innerHTML = '<div class="col-span-3 text-center text-red-500 py-10"><p>Error loading explore feed.</p></div>';
+            }
+        }
+
+        // Initial Load
+        loadExplore();
+    </script>
 </body>
 </html>
