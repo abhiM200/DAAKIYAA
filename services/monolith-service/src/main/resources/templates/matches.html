@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">DAAKIYAA - Matches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .card-container { perspective: 1000px; position: relative; width: 100%; max-width: 400px; height: 600px; margin: 0 auto; }
+        .swipe-card { position: absolute; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transform-origin: 50% 100%; transition: transform 0.3s ease; }
+        .swipe-card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-info { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 30px 20px 20px 20px; }
+        
+        .btn-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; transition: transform 0.1s; border: 2px solid; }
+        .btn-circle:active { transform: scale(0.9); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-20 md:w-64 border-r border-gray-800 h-full flex flex-col justify-between py-6 px-4 shrink-0 transition-all z-50">
+        <div>
+            <a href="/feed" class="mb-10 block px-2">
+                <i class="fa-solid fa-paper-plane text-3xl hidden md:inline-block md:hidden"></i>
+                <h1 class="text-2xl font-bold italic hidden md:block" style="font-family: 'Brush Script MT', cursive;">Daakiyaa</h1>
+            </a>
+            <div class="space-y-2">
+                <a href="/feed" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-house text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Home</span>
+                </a>
+                <a href="/explore" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-compass text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Explore</span>
+                </a>
+                <a href="/reels" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-clapperboard text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Reels</span>
+                </a>
+                <a href="/chat" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-regular fa-message text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Messages</span>
+                </a>
+                <a href="/matches" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition font-bold text-pink-500">
+                    <i class="fa-solid fa-fire text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Matches</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto no-scrollbar flex flex-col items-center justify-center relative bg-[#111]">
+        
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold italic text-pink-500 mb-2">Find your match</h2>
+            <p class="text-gray-400 text-sm">Swipe right to like, left to pass</p>
+        </div>
+
+        <div class="card-container">
+            <!-- Background Card -->
+            <div class="swipe-card" style="transform: scale(0.95) translateY(-20px); z-index: 1;">
+                <img src="https://source.unsplash.com/random/400x600/?portrait,woman" alt="Profile 2">
+                <div class="card-info">
+                    <h3 class="text-3xl font-bold mb-1">Sarah, 24</h3>
+                    <p class="text-sm text-gray-300"><i class="fa-solid fa-briefcase mr-2"></i> Designer</p>
+                    <p class="text-sm text-gray-300"><i class="fa-solid fa-location-dot mr-2"></i> 2 miles away</p>
+                </div>
+            </div>
+
+            <!-- Active Card -->
+            <div class="swipe-card" style="z-index: 2;" id="activeCard">
+                <img src="https://source.unsplash.com/random/400x600/?portrait,man" alt="Profile 1">
+                <div class="card-info">
+                    <h3 class="text-3xl font-bold mb-1">Alex, 27</h3>
+                    <p class="text-sm text-gray-300"><i class="fa-solid fa-graduation-cap mr-2"></i> Software Engineer</p>
+                    <p class="text-sm text-gray-300"><i class="fa-solid fa-location-dot mr-2"></i> 5 miles away</p>
+                    <p class="mt-3 text-sm italic">"Love hiking and building cool apps."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex space-x-8 mt-8">
+            <button class="btn-circle border-red-500 text-red-500 hover:bg-red-500/10" onclick="swipe('left')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <button class="btn-circle border-blue-500 text-blue-500 hover:bg-blue-500/10 w-12 h-12 mt-1">
+                <i class="fa-solid fa-star text-lg"></i>
+            </button>
+            <button class="btn-circle border-green-500 text-green-500 hover:bg-green-500/10" onclick="swipe('right')">
+                <i class="fa-solid fa-heart"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        function swipe(direction) {
+            const card = document.getElementById('activeCard');
+            if(direction === 'left') {
+                card.style.transform = 'translate(-200%, 50px) rotate(-30deg)';
+            } else {
+                card.style.transform = 'translate(200%, 50px) rotate(30deg)';
+            }
+            card.style.opacity = '0';
+            
+            setTimeout(() => {
+                card.style.display = 'none';
+                // Logic to load next card goes here...
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>

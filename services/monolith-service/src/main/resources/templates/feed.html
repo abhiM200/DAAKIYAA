@@ -4,62 +4,177 @@
     <meta charset="UTF-8">
     <title th:text="${title}">DAAKIYAA - Feed</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .story-ring { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 2px; border-radius: 50%; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm p-4 sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600">DAAKIYAA</h1>
-            <div class="space-x-4">
-                <a href="/explore" class="text-gray-600 hover:text-blue-600">Explore</a>
-                <a href="/matches" class="text-gray-600 hover:text-blue-600">Matches</a>
-                <a href="/chat" class="text-gray-600 hover:text-blue-600">Chat</a>
-                <a href="/" class="text-gray-600 hover:text-red-600">Logout</a>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-20 md:w-64 border-r border-gray-800 h-full flex flex-col justify-between py-6 px-4 shrink-0 transition-all">
+        <div>
+            <a href="/feed" class="mb-10 block px-2">
+                <i class="fa-solid fa-paper-plane text-3xl hidden md:inline-block md:hidden"></i>
+                <h1 class="text-2xl font-bold italic hidden md:block" style="font-family: 'Brush Script MT', cursive;">Daakiyaa</h1>
+            </a>
+            <div class="space-y-2">
+                <a href="/feed" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition font-bold">
+                    <i class="fa-solid fa-house text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Home</span>
+                </a>
+                <a href="/explore" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-compass text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Explore</span>
+                </a>
+                <a href="/reels" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-clapperboard text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Reels</span>
+                </a>
+                <a href="/chat" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-regular fa-message text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Messages</span>
+                </a>
+                <a href="/matches" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition text-pink-500">
+                    <i class="fa-solid fa-fire text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Matches</span>
+                </a>
+                <a href="#" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition" onclick="document.getElementById('createModal').classList.remove('hidden')">
+                    <i class="fa-regular fa-square-plus text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Create</span>
+                </a>
             </div>
+        </div>
+        <div>
+            <a href="/" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-red-500/20 text-red-500 transition mt-auto">
+                <i class="fa-solid fa-arrow-right-from-bracket text-xl w-6 text-center"></i>
+                <span class="hidden md:block">Logout</span>
+            </a>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-        <!-- Sidebar -->
-        <div class="hidden md:block col-span-1 bg-white p-4 rounded-lg shadow-sm h-fit">
-            <h3 class="font-bold text-lg mb-4">Your Profile</h3>
-            <p class="text-gray-600 mb-2">Welcome back!</p>
-            <hr class="my-4">
-            <ul class="space-y-2">
-                <li><a href="/feed" class="text-blue-600 font-medium">Home Feed</a></li>
-                <li><a href="/stories" class="text-gray-600 hover:text-blue-600">Stories</a></li>
-                <li><a href="/reels" class="text-gray-600 hover:text-blue-600">Reels</a></li>
-            </ul>
-        </div>
-
-        <!-- Feed Posts -->
-        <div class="col-span-1 md:col-span-2 space-y-6">
-            <!-- Create Post -->
-            <div class="bg-white p-4 rounded-lg shadow-sm">
-                <textarea class="w-full border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 border" placeholder="What's on your mind?"></textarea>
-                <div class="mt-2 flex justify-end">
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700">Post</button>
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto no-scrollbar flex justify-center pb-20 md:pb-0">
+        <div class="w-full max-w-lg mt-8 px-4">
+            
+            <!-- Stories Section -->
+            <div class="flex space-x-4 overflow-x-auto no-scrollbar mb-8 pb-2">
+                <!-- User Story (Add) -->
+                <div class="flex flex-col items-center space-y-1 cursor-pointer min-w-[70px]">
+                    <div class="relative">
+                        <img src="https://ui-avatars.com/api/?name=You&background=random" class="w-16 h-16 rounded-full border-2 border-black" alt="Your Story">
+                        <div class="absolute bottom-0 right-0 bg-blue-500 rounded-full border-2 border-black w-5 h-5 flex items-center justify-center text-xs font-bold">+</div>
+                    </div>
+                    <span class="text-xs text-gray-400">Your story</span>
+                </div>
+                <!-- Other Stories -->
+                <div class="flex flex-col items-center space-y-1 cursor-pointer min-w-[70px]" onclick="window.location.href='/stories'">
+                    <div class="story-ring">
+                        <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-15 h-15 rounded-full border-2 border-black" alt="Alice">
+                    </div>
+                    <span class="text-xs text-gray-300">alice_99</span>
+                </div>
+                <div class="flex flex-col items-center space-y-1 cursor-pointer min-w-[70px]">
+                    <div class="story-ring">
+                        <img src="https://ui-avatars.com/api/?name=Bob&background=random" class="w-15 h-15 rounded-full border-2 border-black" alt="Bob">
+                    </div>
+                    <span class="text-xs text-gray-300">bob.builder</span>
+                </div>
+                <div class="flex flex-col items-center space-y-1 cursor-pointer min-w-[70px]">
+                    <div class="story-ring">
+                        <img src="https://ui-avatars.com/api/?name=Charlie&background=random" class="w-15 h-15 rounded-full border-2 border-black" alt="Charlie">
+                    </div>
+                    <span class="text-xs text-gray-300">charlie_z</span>
                 </div>
             </div>
 
-            <!-- Sample Post -->
-            <div class="bg-white p-4 rounded-lg shadow-sm">
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
-                    <div>
-                        <h4 class="font-bold">John Doe</h4>
-                        <p class="text-xs text-gray-500">2 hours ago</p>
+            <!-- Feed Posts -->
+            <div class="space-y-8">
+                <!-- Post 1 -->
+                <div class="border-b border-gray-800 pb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3 cursor-pointer">
+                            <div class="story-ring">
+                                <img src="https://ui-avatars.com/api/?name=Daakiyaa&background=random" class="w-8 h-8 rounded-full border border-black">
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold">daakiyaa_official <span class="text-gray-500 font-normal ml-1">• 2h</span></h4>
+                                <p class="text-xs text-gray-400">Original Audio</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-ellipsis hover:text-gray-400 cursor-pointer"></i>
+                    </div>
+                    <!-- Post Image (Placeholder) -->
+                    <div class="w-full h-96 bg-gray-900 rounded-md border border-gray-800 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-image text-4xl text-gray-700"></i>
+                    </div>
+                    <!-- Action Bar -->
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex space-x-4 text-2xl">
+                            <i class="fa-regular fa-heart hover:text-gray-400 cursor-pointer transition"></i>
+                            <i class="fa-regular fa-comment hover:text-gray-400 cursor-pointer transition"></i>
+                            <i class="fa-regular fa-paper-plane hover:text-gray-400 cursor-pointer transition"></i>
+                        </div>
+                        <i class="fa-regular fa-bookmark text-2xl hover:text-gray-400 cursor-pointer transition"></i>
+                    </div>
+                    <!-- Likes & Caption -->
+                    <p class="text-sm font-semibold mb-1">1,432 likes</p>
+                    <p class="text-sm"><span class="font-semibold mr-2">daakiyaa_official</span>Welcome to the brand new UI overhaul! It's dark, it's fast, and it's full of micro-animations. Enjoy your new super-app experience. 🚀✨</p>
+                    <p class="text-sm text-gray-500 mt-1 cursor-pointer">View all 128 comments</p>
+                    <div class="flex items-center mt-2">
+                        <input type="text" placeholder="Add a comment..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-300 placeholder-gray-600">
+                        <button class="text-blue-500 text-sm font-semibold hover:text-white transition">Post</button>
                     </div>
                 </div>
-                <p class="text-gray-800 mb-4">Just migrated the architecture to a pure Spring Boot and Thymeleaf monolith! So fast and lightweight. 🚀</p>
-                <div class="flex space-x-4 border-t pt-3 text-sm text-gray-600">
-                    <button class="hover:text-blue-600">Like</button>
-                    <button class="hover:text-blue-600">Comment</button>
-                    <button class="hover:text-blue-600">Share</button>
+
+                <!-- Post 2 -->
+                <div class="border-b border-gray-800 pb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3 cursor-pointer">
+                            <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-9 h-9 rounded-full border border-gray-800">
+                            <div>
+                                <h4 class="text-sm font-semibold">alice_99 <span class="text-gray-500 font-normal ml-1">• 5h</span></h4>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-ellipsis hover:text-gray-400 cursor-pointer"></i>
+                    </div>
+                    <div class="w-full bg-gray-900 rounded-md border border-gray-800 p-8 flex items-center justify-center mb-3 text-center italic font-serif text-xl">
+                        "Just discovered the new Reels feature on Daakiyaa! Amazing."
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex space-x-4 text-2xl">
+                            <i class="fa-regular fa-heart hover:text-gray-400 cursor-pointer transition"></i>
+                            <i class="fa-regular fa-comment hover:text-gray-400 cursor-pointer transition"></i>
+                            <i class="fa-regular fa-paper-plane hover:text-gray-400 cursor-pointer transition"></i>
+                        </div>
+                        <i class="fa-regular fa-bookmark text-2xl hover:text-gray-400 cursor-pointer transition"></i>
+                    </div>
+                    <p class="text-sm font-semibold mb-1">89 likes</p>
                 </div>
             </div>
+            
         </div>
     </main>
+
+    <!-- Create Modal (Hidden by default) -->
+    <div id="createModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-50">
+        <div class="bg-[#262626] w-full max-w-lg rounded-xl border border-gray-700 flex flex-col">
+            <div class="border-b border-gray-700 p-3 text-center flex justify-between items-center">
+                <span class="w-6"></span>
+                <h3 class="font-bold">Create new post</h3>
+                <button onclick="document.getElementById('createModal').classList.add('hidden')" class="w-6 text-xl">&times;</button>
+            </div>
+            <div class="p-20 flex flex-col items-center justify-center">
+                <i class="fa-solid fa-photo-film text-6xl text-gray-500 mb-4"></i>
+                <p class="text-xl font-light mb-6">Drag photos and videos here</p>
+                <button class="bg-blue-500 text-white font-semibold py-1.5 px-4 rounded hover:bg-blue-600 transition">Select from computer</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

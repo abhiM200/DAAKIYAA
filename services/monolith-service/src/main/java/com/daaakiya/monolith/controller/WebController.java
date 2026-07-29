@@ -30,4 +30,34 @@ public class WebController {
         model.addAttribute("title", "DAAKIYAA - Feed");
         return "feed";
     }
+
+    @GetMapping("/explore")
+    public String explore(Model model) {
+        model.addAttribute("title", "DAAKIYAA - Explore");
+        return "explore";
+    }
+
+    @GetMapping("/matches")
+    public String matches(Model model) {
+        model.addAttribute("title", "DAAKIYAA - Matches");
+        return "matches";
+    }
+
+    @GetMapping("/chat")
+    public String chat(Model model) {
+        model.addAttribute("title", "DAAKIYAA - Chat");
+        return "chat";
+    }
+
+    @GetMapping("/stories")
+    public String stories(Model model) {
+        model.addAttribute("title", "DAAKIYAA - Stories");
+        return "stories";
+    }
+
+    @GetMapping("/reels")
+    public String reels(Model model) {
+        model.addAttribute("title", "DAAKIYAA - Reels");
+        return "reels";
+    }
 }

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">DAAKIYAA - Explore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .grid-img { aspect-ratio: 1 / 1; object-fit: cover; width: 100%; transition: transform 0.3s; cursor: pointer; }
+        .grid-item:hover .grid-img { transform: scale(1.05); }
+        .grid-item { overflow: hidden; position: relative; }
+        .grid-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s; display: flex; justify-content: center; align-items: center; space-x: 4; font-weight: bold; }
+        .grid-item:hover .grid-overlay { opacity: 1; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-20 md:w-64 border-r border-gray-800 h-full flex flex-col justify-between py-6 px-4 shrink-0 transition-all z-50">
+        <div>
+            <a href="/feed" class="mb-10 block px-2">
+                <i class="fa-solid fa-paper-plane text-3xl hidden md:inline-block md:hidden"></i>
+                <h1 class="text-2xl font-bold italic hidden md:block" style="font-family: 'Brush Script MT', cursive;">Daakiyaa</h1>
+            </a>
+            <div class="space-y-2">
+                <a href="/feed" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-house text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Home</span>
+                </a>
+                <a href="/explore" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition font-bold">
+                    <i class="fa-solid fa-compass text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Explore</span>
+                </a>
+                <a href="/reels" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-solid fa-clapperboard text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Reels</span>
+                </a>
+                <a href="/chat" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition">
+                    <i class="fa-regular fa-message text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Messages</span>
+                </a>
+                <a href="/matches" class="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/10 transition text-pink-500">
+                    <i class="fa-solid fa-fire text-xl w-6 text-center"></i>
+                    <span class="hidden md:block">Matches</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto no-scrollbar flex justify-center">
+        <div class="w-full max-w-4xl mt-8 px-4">
+            
+            <!-- Search Bar -->
+            <div class="mb-8 max-w-md mx-auto">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
+                    <input type="text" placeholder="Search Daakiyaa..." class="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-12 pr-4 focus:outline-none focus:border-gray-500 text-sm">
+                </div>
+            </div>
+
+            <!-- Explore Grid -->
+            <div class="grid grid-cols-3 gap-1 md:gap-4 pb-20">
+                
+                <!-- Grid Item 1 (Reel double span) -->
+                <div class="grid-item row-span-2 col-span-1">
+                    <img src="https://source.unsplash.com/random/400x800/?nature" class="h-full w-full object-cover transition duration-300">
+                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 14K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 201</span>
+                    </div>
+                </div>
+
+                <!-- Grid Item 2 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?city" class="grid-img">
+                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clone text-white shadow-sm"></i></div>
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 2.1K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 40</span>
+                    </div>
+                </div>
+
+                <!-- Grid Item 3 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?portrait" class="grid-img">
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 800</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 12</span>
+                    </div>
+                </div>
+
+                <!-- Grid Item 4 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?food" class="grid-img">
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 4.5K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 89</span>
+                    </div>
+                </div>
+
+                <!-- Grid Item 5 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?technology" class="grid-img">
+                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 12K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 55</span>
+                    </div>
+                </div>
+
+                <!-- Grid Item 6 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?architecture" class="grid-img">
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 901</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 8</span>
+                    </div>
+                </div>
+                
+                <!-- Grid Item 7 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?abstract" class="grid-img">
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 3.2K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 110</span>
+                    </div>
+                </div>
+                
+                <!-- Grid Item 8 (Reel double span) -->
+                <div class="grid-item row-span-2 col-span-1">
+                    <img src="https://source.unsplash.com/random/400x800/?fashion" class="h-full w-full object-cover transition duration-300">
+                    <div class="absolute top-2 right-2"><i class="fa-solid fa-clapperboard text-white shadow-sm"></i></div>
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 45K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 890</span>
+                    </div>
+                </div>
+
+                <!-- Grid Item 9 -->
+                <div class="grid-item">
+                    <img src="https://source.unsplash.com/random/400x400/?travel" class="grid-img">
+                    <div class="grid-overlay space-x-4 text-sm">
+                        <span><i class="fa-solid fa-heart mr-1"></i> 1.1K</span>
+                        <span><i class="fa-solid fa-comment mr-1"></i> 20</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+</body>
+</html>
