@@ -26,6 +26,14 @@ public class ContentController {
         post.setAuthorId(authorId != null ? authorId : UUID.randomUUID());
         post.setTextContent(request.textContent());
         
+        if (request.imageUrl() != null && !request.imageUrl().trim().isEmpty()) {
+            com.daaakiya.contentservice.model.Media media = new com.daaakiya.contentservice.model.Media();
+            media.setMediaUrl(request.imageUrl());
+            media.setMediaType(com.daaakiya.contentservice.model.MediaType.IMAGE);
+            media.setPost(post);
+            post.getMediaList().add(media);
+        }
+
         Post savedPost = postRepository.save(post);
         return ResponseEntity.ok(savedPost);
     }
@@ -46,4 +54,4 @@ public class ContentController {
     }
 }
 
-record PostRequest(String textContent) {}
+record PostRequest(String textContent, String imageUrl) {}

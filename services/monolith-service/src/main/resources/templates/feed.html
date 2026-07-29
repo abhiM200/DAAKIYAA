@@ -93,67 +93,11 @@
             </div>
 
             <!-- Feed Posts -->
-            <div class="space-y-8">
-                <!-- Post 1 -->
-                <div class="border-b border-gray-800 pb-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center space-x-3 cursor-pointer">
-                            <div class="story-ring">
-                                <img src="https://ui-avatars.com/api/?name=Daakiyaa&background=random" class="w-8 h-8 rounded-full border border-black">
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold">daakiyaa_official <span class="text-gray-500 font-normal ml-1">• 2h</span></h4>
-                                <p class="text-xs text-gray-400">Original Audio</p>
-                            </div>
-                        </div>
-                        <i class="fa-solid fa-ellipsis hover:text-gray-400 cursor-pointer"></i>
-                    </div>
-                    <!-- Post Image (Placeholder) -->
-                    <div class="w-full h-96 bg-gray-900 rounded-md border border-gray-800 flex items-center justify-center mb-3">
-                        <i class="fa-solid fa-image text-4xl text-gray-700"></i>
-                    </div>
-                    <!-- Action Bar -->
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex space-x-4 text-2xl">
-                            <i class="fa-regular fa-heart hover:text-gray-400 cursor-pointer transition"></i>
-                            <i class="fa-regular fa-comment hover:text-gray-400 cursor-pointer transition"></i>
-                            <i class="fa-regular fa-paper-plane hover:text-gray-400 cursor-pointer transition"></i>
-                        </div>
-                        <i class="fa-regular fa-bookmark text-2xl hover:text-gray-400 cursor-pointer transition"></i>
-                    </div>
-                    <!-- Likes & Caption -->
-                    <p class="text-sm font-semibold mb-1">1,432 likes</p>
-                    <p class="text-sm"><span class="font-semibold mr-2">daakiyaa_official</span>Welcome to the brand new UI overhaul! It's dark, it's fast, and it's full of micro-animations. Enjoy your new super-app experience. 🚀✨</p>
-                    <p class="text-sm text-gray-500 mt-1 cursor-pointer">View all 128 comments</p>
-                    <div class="flex items-center mt-2">
-                        <input type="text" placeholder="Add a comment..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-300 placeholder-gray-600">
-                        <button class="text-blue-500 text-sm font-semibold hover:text-white transition">Post</button>
-                    </div>
-                </div>
-
-                <!-- Post 2 -->
-                <div class="border-b border-gray-800 pb-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center space-x-3 cursor-pointer">
-                            <img src="https://ui-avatars.com/api/?name=Alice&background=random" class="w-9 h-9 rounded-full border border-gray-800">
-                            <div>
-                                <h4 class="text-sm font-semibold">alice_99 <span class="text-gray-500 font-normal ml-1">• 5h</span></h4>
-                            </div>
-                        </div>
-                        <i class="fa-solid fa-ellipsis hover:text-gray-400 cursor-pointer"></i>
-                    </div>
-                    <div class="w-full bg-gray-900 rounded-md border border-gray-800 p-8 flex items-center justify-center mb-3 text-center italic font-serif text-xl">
-                        "Just discovered the new Reels feature on Daakiyaa! Amazing."
-                    </div>
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex space-x-4 text-2xl">
-                            <i class="fa-regular fa-heart hover:text-gray-400 cursor-pointer transition"></i>
-                            <i class="fa-regular fa-comment hover:text-gray-400 cursor-pointer transition"></i>
-                            <i class="fa-regular fa-paper-plane hover:text-gray-400 cursor-pointer transition"></i>
-                        </div>
-                        <i class="fa-regular fa-bookmark text-2xl hover:text-gray-400 cursor-pointer transition"></i>
-                    </div>
-                    <p class="text-sm font-semibold mb-1">89 likes</p>
+            <div id="feedContainer" class="space-y-8">
+                <!-- Posts will be loaded here dynamically by JavaScript -->
+                <div class="text-center text-gray-500 py-10">
+                    <i class="fa-solid fa-spinner fa-spin text-3xl mb-4"></i>
+                    <p>Loading posts...</p>
                 </div>
             </div>
             
@@ -166,15 +110,120 @@
             <div class="border-b border-gray-700 p-3 text-center flex justify-between items-center">
                 <span class="w-6"></span>
                 <h3 class="font-bold">Create new post</h3>
-                <button onclick="document.getElementById('createModal').classList.add('hidden')" class="w-6 text-xl">&times;</button>
+                <button onclick="document.getElementById('createModal').classList.add('hidden')" class="w-6 text-xl hover:text-gray-400">&times;</button>
             </div>
-            <div class="p-20 flex flex-col items-center justify-center">
-                <i class="fa-solid fa-photo-film text-6xl text-gray-500 mb-4"></i>
-                <p class="text-xl font-light mb-6">Drag photos and videos here</p>
-                <button class="bg-blue-500 text-white font-semibold py-1.5 px-4 rounded hover:bg-blue-600 transition">Select from computer</button>
-            </div>
+            <form id="createPostForm" class="p-6 flex flex-col space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Image URL (leave blank for random)</label>
+                    <input type="text" id="postImageUrl" placeholder="https://..." class="w-full bg-black border border-gray-600 rounded p-2 focus:outline-none focus:border-blue-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Caption</label>
+                    <textarea id="postCaption" rows="4" placeholder="Write a caption..." class="w-full bg-black border border-gray-600 rounded p-2 focus:outline-none focus:border-blue-500 text-sm" required></textarea>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition mt-4">Share Post</button>
+            </form>
         </div>
     </div>
 
+    <script>
+        const token = localStorage.getItem('token') || '';
+        
+        async function loadFeed() {
+            try {
+                const response = await fetch('/api/content/posts/feed', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Failed to load feed');
+                const page = await response.json();
+                const posts = page.content;
+                
+                const container = document.getElementById('feedContainer');
+                if (posts.length === 0) {
+                    container.innerHTML = '<div class="text-center text-gray-500 py-10"><p>No posts yet. Be the first to post!</p></div>';
+                    return;
+                }
+
+                container.innerHTML = posts.map(post => {
+                    const imageUrl = (post.mediaList && post.mediaList.length > 0) ? post.mediaList[0].mediaUrl : null;
+                    const date = new Date(post.createdAt).toLocaleDateString();
+                    
+                    return `
+                    <div class="border-b border-gray-800 pb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3 cursor-pointer">
+                                <div class="story-ring">
+                                    <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-8 h-8 rounded-full border border-black">
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-semibold">user_${post.authorId.substring(0, 5)} <span class="text-gray-500 font-normal ml-1">• ${date}</span></h4>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-ellipsis hover:text-gray-400 cursor-pointer"></i>
+                        </div>
+                        ${imageUrl ? `
+                        <div class="w-full h-96 bg-gray-900 rounded-md border border-gray-800 flex items-center justify-center mb-3 overflow-hidden">
+                            <img src="${imageUrl}" class="w-full h-full object-cover">
+                        </div>` : `
+                        <div class="w-full bg-gray-900 rounded-md border border-gray-800 p-8 flex items-center justify-center mb-3 text-center italic font-serif text-xl">
+                            ${post.textContent}
+                        </div>
+                        `}
+                        <div class="flex justify-between items-center mb-2 mt-2">
+                            <div class="flex space-x-4 text-2xl">
+                                <i class="fa-regular fa-heart hover:text-gray-400 cursor-pointer transition"></i>
+                                <i class="fa-regular fa-comment hover:text-gray-400 cursor-pointer transition"></i>
+                                <i class="fa-regular fa-paper-plane hover:text-gray-400 cursor-pointer transition"></i>
+                            </div>
+                            <i class="fa-regular fa-bookmark text-2xl hover:text-gray-400 cursor-pointer transition"></i>
+                        </div>
+                        ${imageUrl ? `<p class="text-sm"><span class="font-semibold mr-2">user_${post.authorId.substring(0, 5)}</span>${post.textContent}</p>` : ''}
+                    </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('feedContainer').innerHTML = '<div class="text-center text-red-500 py-10"><p>Error loading posts.</p></div>';
+            }
+        }
+
+        document.getElementById('createPostForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let imageUrl = document.getElementById('postImageUrl').value;
+            const textContent = document.getElementById('postCaption').value;
+
+            if (!imageUrl) {
+                // generate a random unsplash image if none provided
+                const randomId = Math.floor(Math.random() * 1000);
+                imageUrl = `https://source.unsplash.com/random/800x800?sig=${randomId}`;
+            }
+
+            try {
+                const response = await fetch('/api/content/posts', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ textContent, imageUrl })
+                });
+
+                if (response.ok) {
+                    document.getElementById('createModal').classList.add('hidden');
+                    document.getElementById('createPostForm').reset();
+                    loadFeed(); // refresh feed
+                } else {
+                    alert('Failed to create post');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error creating post');
+            }
+        });
+
+        // Initial Load
+        loadFeed();
+    </script>
 </body>
 </html>
