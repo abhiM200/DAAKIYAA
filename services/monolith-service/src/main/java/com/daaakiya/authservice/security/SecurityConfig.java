@@ -27,10 +27,7 @@ public class SecurityConfig {
                 return corsConfig;
             }))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/", "/login", "/register", "/feed", "/css/**", "/js/**", "/images/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
